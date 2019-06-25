@@ -156,6 +156,21 @@ class ImportSource extends ImportSourceHook {
             'description' => $form->translate('import virtual machines (virtualization/virtual-machines in netbox).'),
         ));
 
+	$form->addElement('YesNo', 'importsites', array(
+            'label'       => $form->translate('Import site info'),
+            'description' => $form->translate('import sites (dcim/sites in netbox) info and expand host site info.'),
+        ));
+
+        $form->addElement('YesNo', 'importdeviceroles', array(
+            'label'       => $form->translate('Import device roles'),
+            'description' => $form->translate('import device roles (dcim/device-roles in netbox).'),
+        ));
+
+        $form->addElement('YesNo', 'importplatform', array(
+            'label'       => $form->translate('Import platforms'),
+            'description' => $form->translate('import platforms (dcim/platforms in netbox).'),
+        ));
+
         $form->addElement('YesNo', 'activeonly', array(
             'label'       => $form->translate('Import active objects only'),
             'description' => $form->translate('only load objects with status "active" (as opposed to "planned" or "offline")'),
@@ -178,6 +193,18 @@ class ImportSource extends ImportSourceHook {
 
         if($this->getSetting('importvirtualmachines') === 'y') {
             $objects[] = $this->fetchHosts('virtualization/virtual-machines', 'virtual-machine', $activeonly);
+        }
+
+        if($this->getSetting('importsites') === 'y') {
+            $objects[] = $this->fetchHosts('dcim/sites', 'site', $activeonly);
+        }
+
+        if($this->getSetting('importdeviceroles') === 'y') {
+            $objects[] = $this->fetchHosts('dcim/device-roles', 'device-role', FALSE);
+        }
+
+        if($this->getSetting('importplatform') === 'y') {
+            $objects[] = $this->fetchHosts('dcim/platforms', 'platform', FALSE);
         }
 
         return array_merge(...$objects);

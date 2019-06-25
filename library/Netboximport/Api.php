@@ -34,7 +34,8 @@ class Api {
 
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Authorization: Token ' . $this->apitoken,
-        ));
+    ));
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
         if($method == 'POST') {
             curl_setopt($ch, CURLOPT_POST, 1);
@@ -57,7 +58,7 @@ class Api {
                 return $response; // single
             }
         } else {
-            throw new \Exception("Netbox API request failed: status=$status, error=$curlerror");
+            throw new \Exception("Netbox API request failed: url=$url, status=$status, error=$curlerror");
         }
     }
 
