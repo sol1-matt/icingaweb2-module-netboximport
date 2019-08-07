@@ -156,6 +156,11 @@ class ImportSource extends ImportSourceHook {
             'description' => $form->translate('import virtual machines (virtualization/virtual-machines in netbox).'),
         ));
 
+	$form->addElement('YesNo', 'importtenants', array(
+            'label'       => $form->translate('Import tenant info'),
+            'description' => $form->translate('import tenant (tenancy/tenants in netbox) info.'),
+        ));
+
 	$form->addElement('YesNo', 'importsites', array(
             'label'       => $form->translate('Import site info'),
             'description' => $form->translate('import sites (dcim/sites in netbox) info and expand host site info.'),
@@ -193,6 +198,10 @@ class ImportSource extends ImportSourceHook {
 
         if($this->getSetting('importvirtualmachines') === 'y') {
             $objects[] = $this->fetchHosts('virtualization/virtual-machines', 'virtual-machine', $activeonly);
+        }
+
+        if($this->getSetting('importtenants') === 'y') {
+            $objects[] = $this->fetchHosts('tenancy/tenants', 'tenant', FALSE);
         }
 
         if($this->getSetting('importsites') === 'y') {
